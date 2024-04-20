@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Jewish Calendar</title>
+    <style>
+        body {
+            direction: rtl;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+
+        .container {
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-x: hidden; /* Hide horizontal overflow */
+        }
+
+        #week-range {
+            display: block;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .week-navigation {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #previous-week-button,
+        #next-week-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #previous-week-button:hover,
+        #next-week-button:hover {
+            background-color: #0056b3;
+        }
+
+        table {
+            width: 100%;
+            max-width: 100vw;
+            border-collapse: collapse;
+            border: 2px solid #333;
+            background-color: #fff;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        td:first-child {
+            font-weight: bold;
+            text-align: right;
+        }
+
+        tbody tr:nth-child(odd) {
+            background-color: #f2f2f2;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #e0e0e0;
+        }
+
+        @media (max-width: 600px) {
+            table {
+                font-size: 9.5px;
+        
+               th, td {
+            border: 1px solid #ccc;
+            padding: 2px;
+            text-align: center;
+            font-size: 8px;
+        }
+        }
+            #previous-week-button, #next-week-button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#"><img src="enter.jpg" width=50 height=50></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="show.html">לוח משמרות</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="index.html">מילוי משמרות</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="exit.html">יציאה</a>
+        </li>  
+  
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<center>
+<div class="container-fluid mt-3">
+  <h3>
+      דף משמרות שבועי
+  </h3>
+
+</div>
+</center>
+    <div class="container">
+        <span id="week-range"></span>
+        <div class="week-navigation">
+            <button id="previous-week-button">שבוע קודם</button>
+            <button id="next-week-button">שבוע הבא</button>
+        </div>
+        <table id="jewish-calendar">
+            <thead>
+                <tr>
+                    <th>שעת משמרת</th>
+                    <th>ראשון</th>
+                    <th>שני</th>
+                    <th>שלישי</th>
+                    <th>רביעי</th>
+                    <th>חמישי</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Calendar rows will be added dynamically here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js";
+import { getFirestore, where, collection, addDoc, getDoc, query, serverTimestamp ,limitToLast, orderBy, limit, startAfter, startAt, endAt, onSnapshot, doc, getDocs, deleteField, updateDoc, deleteDoc, setDoc } from 'https://www.gstatic.com/firebasejs/9.9.4/firebase-firestore.js';
+import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-auth.js";
+import { getDatabase, ref, set, onValue, onDisconnect } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB87m7IcXd1gqnSYZEBXqwpQIQbOItRwqY",
+  authDomain: "todos-e7e2f.firebaseapp.com",
+  databaseURL: "https://todos-e7e2f-default-rtdb.firebaseio.com",
+  projectId: "todos-e7e2f",
+  storageBucket: "todos-e7e2f.appspot.com",
+  messagingSenderId: "523425205783",
+  appId: "1:523425205783:web:6fd93bb6f354c361541652"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const db = getFirestore(app);
+let currentUserUID =''
+ let usernames =''
+        let currentDate = new Date(); // Define currentDate globally
+        onAuthStateChanged(auth, (user) => {
+    if (user) {
+        // קבלת זיהוי המשתמש הנוכחי
+        currentUserUID = user.uid;
+        displayCurrentWeek();
+        // כאן תוכל להשתמש ב-UID של המשתמש לעשות משהו
+        console.log("UID של המשתמש הנוכחי: ", currentUserUID);
+    } else {
+        window.location.href="login.html"
+    }
+});
+ 
+// async function checkUshifts(userid, date, shiftType) {
+//     const shiftsCollectionRef = collection(db, 'shifts');
+
+//     // Query the shifts collection to check if a document with the same user ID and date exists
+//     const querySnapshot =await getDocs(query(shiftsCollectionRef,
+//         where('userId', '==', userid),
+//         where('shiftType', '==', shiftType),
+//         where('date', '==', date)
+//     ));
+
+//     // Check if the query returned any documents
+//     if (!querySnapshot.empty) {
+//         // Query returned documents, so display the user ID
+//         console.log('User ID:', userid);
+
+//         // Get the user document corresponding to the provided user ID
+//         const userDocRef = doc(db, 'users', userid);
+//         const userDocSnapshot = await getDoc(userDocRef);
+
+//         // Check if the user document exists
+//         if (userDocSnapshot.exists()) {
+//             // Extract the email from the user document
+//             const email = userDocSnapshot.data().email;
+//             // Extract the username from the email
+//             const usernameWithoutAt = email.split('@')[0];
+//             console.log(usernameWithoutAt)
+            
+//             return usernameWithoutAt;
+
+//         } else {
+//             // User document doesn't exist
+//             return null;        }
+//     } else {
+//         // No shifts found for the user ID and date
+//         return null;
+//     }
+//     return null;
+// }
+
+async function displayCurrentWeek() {
+    let dates = [];
+    let shiftTypes = [];
+    let usersId = new Set(); // Use a Set to store unique user IDs
+    let usernames = []; // Declare an array to store usernames by user ID
+    const tableBody = document.querySelector('#jewish-calendar tbody');
+    let weekStart = new Date(currentDate);
+    weekStart.setDate(weekStart.getDate() - weekStart.getDay()); // Get first day of the week
+    const weekEnd = new Date(currentDate);
+    weekEnd.setDate(weekEnd.getDate() + (6 - weekEnd.getDay())); // Get last day of the week
+    tableBody.innerHTML = ''; // Clear table body
+
+    const shiftsCollection = collection(db, 'shifts'); // Define the shifts collection reference
+
+    try {
+        const querySnapshot = await getDocs(shiftsCollection); // Fetch documents from the shifts collection
+
+        // Process shift documents
+        querySnapshot.forEach(doc => {
+            if (doc.exists()) {
+                if(doc.data().shiftType){
+                dates.push(doc.data().date);
+                shiftTypes.push(doc.data().shiftType);
+                const userId = doc.data().userId;
+                usersId.add(userId); // Add user ID to the set
+                // Create an object with username and date
+                const userEntry = {
+                    username: doc.data().username,
+                    date: doc.data().date
+                };
+                usernames.push(userEntry); // Push the object to the usernames array
+            }
+        }
+        });
+
+        while (weekStart <= weekEnd) {
+            const formattedDate = `${weekStart.getDate()}/${weekStart.getMonth() + 1}/${weekStart.getFullYear()}`;
+            let row1InnerHtmlMorning = '<td>משמרת בוקר</td>'; // Reset row inner HTML for morning shifts
+            let row1InnerHtmlAfternoon = '<td>משמרת צהריים</td>'; // Reset row inner HTML for afternoon shifts
+
+            // Create an array to track filled dates
+            let filledDates = [];
+            dates.forEach((date) => {
+                filledDates.push(date);
+            });
+
+            // Populate row1InnerHtml based on shifts for the current day
+            let cellCountMorning = 0; // Counter to track the number of morning shift cells created
+            let cellCountAfternoon = 0; // Counter to track the number of afternoon shift cells created
+
+            // Loop over all days of the week (7 days)
+            for (let i = 0; i < 7; i++) {
+                // Exit the loop if the maximum number of cells is reached
+                if (cellCountMorning >= 5) break;
+
+                const currentDate = new Date(weekStart);
+                currentDate.setDate(currentDate.getDate() + i); // Get the date for the current day
+
+                const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
+
+                // Check if the current date is filled for morning shift
+                if (filledDates.includes(formattedDate)) {
+                    let shiftType = ''; // Initialize shiftType
+                    // Find the shiftType corresponding to the current date
+                    const index = filledDates.indexOf(formattedDate);
+                    if (index !== -1) {
+                        shiftType = shiftTypes[index];
+                    }
+
+                    // Populate the cell based on the shiftType for morning shift
+                    if (shiftType === "בית" || shiftType==="סטודיו" ) {
+                        // Construct HTML for displaying usernames
+                        let usernamesHTML = '';
+                        for (const userEntry of usernames) {
+                            // Check if the date matches the formatted date
+                            if (userEntry.date === formattedDate) {
+                                // Check if the username exists
+                                let cleanedUsername = userEntry.username.split('@')[0];
+                                if (userEntry.username !== null && userEntry.username !== undefined) {
+                                    usernamesHTML += `<div>${cleanedUsername}</div>`;
+                                }
+                            }
+                        }
+
+                        // Append usernames HTML to the cell
+                        if (usernamesHTML !== '') { // Only append if usernamesHTML is not empty
+                            row1InnerHtmlMorning += `<td>${usernamesHTML}</td><input type="hidden" value="${formattedDate}"></td>`;
+                        }
+                    } else {
+                        // If the current date is not filled, create an empty cell for morning shift
+                        row1InnerHtmlMorning += `<td></td>`;
+                    }
+                    cellCountMorning++; // Increment the morning shift cell count
+                } else {
+                    // If the current date is not filled, create an empty cell for morning shift
+                    row1InnerHtmlMorning += `<td></td>`;
+                    cellCountMorning++; // Increment the morning shift cell count
+                }
+
+                // Populate the cell based on the shiftType for afternoon shift
+                // Here we don't need to check if the date is filled or not as we want to ensure both morning and afternoon shifts have the same number of cells
+                const shiftTypeIndex = filledDates.findIndex(date => date === formattedDate+"m");
+                if (shiftTypeIndex !== -1) {
+                    // If the date exists in filledDates, show the shift type
+                    const shiftType = shiftTypes[shiftTypeIndex];
+
+                    if (shiftType === "בית" || shiftType==="סטודיו") {
+                        // Construct HTML for displaying usernames
+                        let usernamesHTML = '';
+                        for (const userEntry of usernames) {
+                            // Check if the date matches the formatted date
+                            if (userEntry.date === formattedDate + "m") {
+                                // Check if the username exists
+                                let cleanedUsername = userEntry.username.split('@')[0];
+                                if (userEntry.username !== null && userEntry.username !== undefined) {
+                                    usernamesHTML += `<div>${cleanedUsername}</div>`;
+                                }
+                            }
+                        }
+
+                        // Append usernames HTML to the cell
+                        if (usernamesHTML !== '') { // Only append if usernamesHTML is not empty
+                            row1InnerHtmlAfternoon += `<td>${usernamesHTML}</td><input type="hidden" value="${formattedDate}m"></td>`;
+                        }
+                    } else {
+                        // If the shiftType is not "בית", create an empty cell for afternoon shift
+                        row1InnerHtmlAfternoon += `<td></td>`;
+                    }
+                    cellCountAfternoon++; // Increment the afternoon shift cell count
+                } else {
+                    // If the date does not exist in filledDates, create an empty cell for afternoon shift
+                    row1InnerHtmlAfternoon += `<td></td>`;
+                    cellCountAfternoon++; // Increment the afternoon shift cell count
+                }
+            }
+
+            // If there are remaining cells needed for afternoon shift, fill them with empty cells
+            row1InnerHtmlAfternoon += '<td></td>'.repeat(5 - cellCountAfternoon);
+
+            // Create rows for each day of the week
+            const rowMorning = document.createElement('tr');
+            rowMorning.innerHTML = `
+                <td>תאריך</td>
+                <td>${weekStart.getDate()}</td>
+                <td>${weekStart.getDate() + 1}</td>
+                <td>${weekStart.getDate() + 2}</td>
+                <td>${weekStart.getDate() + 3}</td>
+                <td>${weekStart.getDate() + 4}</td>
+            `;
+
+            const rowMorningShift = document.createElement('tr');
+            rowMorningShift.innerHTML = row1InnerHtmlMorning; // Populate the row with morning shift HTML
+
+            const rowAfternoonShift = document.createElement('tr');
+            rowAfternoonShift.innerHTML = row1InnerHtmlAfternoon; // Populate the row with afternoon shift HTML
+
+            // Append rows to the table body
+            tableBody.appendChild(rowMorning);
+            tableBody.appendChild(rowMorningShift); // Append morning shift row
+            tableBody.appendChild(rowAfternoonShift); // Append afternoon shift row
+
+            // Move to the next week
+            weekStart.setDate(weekStart.getDate() + 7);
+        }
+
+        // Display the week range above the table
+        const firstDayOfWeek = new Date(currentDate);
+        firstDayOfWeek.setDate(firstDayOfWeek.getDate() - firstDayOfWeek.getDay()); // Get first day of the week
+        const lastDayOfWeek = new Date(currentDate);
+        lastDayOfWeek.setDate(lastDayOfWeek.getDate() + (6 - lastDayOfWeek.getDay())); // Get last day of the week
+        const weekRangeElement = document.getElementById('week-range');
+        weekRangeElement.textContent = `${firstDayOfWeek.getDate()}.${firstDayOfWeek.getMonth() + 1}.${firstDayOfWeek.getFullYear()} - ${lastDayOfWeek.getDate()}.${lastDayOfWeek.getMonth() + 1}.${lastDayOfWeek.getFullYear()}`;
+    } catch (error) {
+        console.log('Error getting documents: ', error);
+    }
+}
+
+
+
+        // Display the current week on page load
+  
+        
+// Function to add event listeners to select elements
+// Add event listener to the document and use event delegation to handle select element changes
+// document.addEventListener('change', function(event) {
+//     // Check if the target of the event is a select element
+//     if (event.target.tagName === 'SELECT') {
+       
+        
+//         if (event.target.value === 'בית' || event.target.value === 'סטודיו' || event.target.value == '' ) {
+//             // Get the date from the hidden input field next to the select element
+//             const hiddenInput = event.target.nextElementSibling;
+//             const date = hiddenInput.value;
+            
+//             // Log the shift with the selected shiftType and date
+//             logShift(event.target.value, date);
+//         }
+//     }
+// });
+
+// function logShift(shiftType, date) {
+//     // Check if there is a current user
+//     onAuthStateChanged(auth, (user) => {
+//         if (user) {
+//             // Get the UID of the current user
+//             const currentUserUID = user.uid;
+
+//             // Define a reference to the "shifts" collection
+//             const shiftsCollectionRef = collection(db, 'shifts');
+
+//             // Check if a document with the same date exists
+// const queryRef = query(shiftsCollectionRef, 
+//     where('userId', '==', currentUserUID), 
+//     where('date', '==', date), 
+    
+// );            
+//             getDocs(queryRef).then((querySnapshot) => {
+//                 if (!querySnapshot.empty) {
+//                     // Document with the same date already exists, update shiftType
+//                     querySnapshot.forEach((doc) => {
+//                         updateDoc(doc.ref, {
+//                             shiftType: shiftType
+//                         }).then(() => {
+//                             console.log('Shift type updated successfully');
+//                         }).catch((error) => {
+//                             console.error('Error updating shift type: ', error);
+//                         });
+//                     });
+//                 } else {
+//                     // Document with the same date does not exist, create a new one
+//                     addDoc(shiftsCollectionRef, {
+//                         userId: currentUserUID,
+//                         shiftType: shiftType,
+//                         date: date,
+                      
+//                     })
+//                     .then((docRef) => {
+//                         console.log('Shift logged successfully with ID: ', docRef.id);
+//                     })
+//                     .catch((error) => {
+//                         console.error('Error logging shift: ', error);
+//                     });
+//                 }
+//             }).catch((error) => {
+//                 console.error('Error checking for existing document: ', error);
+//             });
+//         } else {
+//             console.log("No user is currently signed in");
+//             // Add code here if needed, e.g., display a message to the user
+//         }
+//     });
+// }
+
+var buttonsEnabled = true;
+
+// Function to handle clicking on the previous week button
+function previousWeek() {
+    if (!buttonsEnabled) return; // Exit function if buttons are disabled
+    disableButtons(); // Disable buttons to prevent double-click
+    currentDate.setDate(currentDate.getDate() - 7);
+    displayCurrentWeek();
+}
+
+// Function to handle clicking on the next week button
+function nextWeek() {
+    if (!buttonsEnabled) return; // Exit function if buttons are disabled
+    disableButtons(); // Disable buttons to prevent double-click
+    currentDate.setDate(currentDate.getDate() + 7);
+    displayCurrentWeek();
+}
+
+// Function to disable the previous and next week buttons
+function disableButtons() {
+    buttonsEnabled = false;
+    setTimeout(function() {
+        buttonsEnabled = true;
+    }, 1000); // Enable buttons after 1 second (adjust the time as needed)
+}
+// קריאה לפונקציות previousWeek ו-nextWeek עם אירועי לחיצה
+document.getElementById('previous-week-button').addEventListener('click', previousWeek);
+document.getElementById('next-week-button').addEventListener('click', nextWeek);
+   
+    </script>
+</body>
+</html>

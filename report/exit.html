@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js";
+    import { getFirestore, where, collection, addDoc, getDoc, query, serverTimestamp ,limitToLast, orderBy, limit, startAfter, startAt, endAt, onSnapshot, doc, getDocs, deleteField, updateDoc, deleteDoc, setDoc } from 'https://www.gstatic.com/firebasejs/9.9.4/firebase-firestore.js';
+    import { getAuth,signOut , createUserWithEmailAndPassword, onAuthStateChanged,signInWithPopup, GoogleAuthProvider,updateProfile} from "https://www.gstatic.com/firebasejs/9.9.4/firebase-auth.js";
+    import { getDatabase, ref, set, onValue, onDisconnect } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-database.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyB87m7IcXd1gqnSYZEBXqwpQIQbOItRwqY",
+      authDomain: "todos-e7e2f.firebaseapp.com",
+      databaseURL: "https://todos-e7e2f-default-rtdb.firebaseio.com",
+      projectId: "todos-e7e2f",
+      storageBucket: "todos-e7e2f.appspot.com",
+      messagingSenderId: "523425205783",
+      appId: "1:523425205783:web:6fd93bb6f354c361541652"
+    };
+    const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+// Get the Firebase Auth instance
+
+// Log out the current user
+signOut(auth)
+  .then(() => {
+    console.log("User logged out successfully");
+    location.href="index.html"
+    // Optionally, redirect the user to a different page or perform other actions
+  })
+  .catch((error) => {
+    console.error("Error logging out:", error);
+  });
+    </script>
+</body>
+</html>
