@@ -174,12 +174,10 @@ let email = ''
         let currentDate = new Date(); // Define currentDate globally
         onAuthStateChanged(auth, (user) => {
     if (user) {
-        // קבלת זיהוי המשתמש הנוכחי
+       
         currentUserUID = user.uid;
         email = user.email;
         displayCurrentWeek();
-        // כאן תוכל להשתמש ב-UID של המשתמש לעשות משהו
-        console.log("UID של המשתמש הנוכחי: ", currentUserUID);
     } else {
         window.location.href="login.html"
     }
@@ -420,7 +418,7 @@ function disableButtons() {
         buttonsEnabled = true;
     }, 1000); // Enable buttons after 1 second (adjust the time as needed)
 }
-// קריאה לפונקציות previousWeek ו-nextWeek עם אירועי לחיצה
+
 document.getElementById('previous-week-button').addEventListener('click', previousWeek);
 document.getElementById('next-week-button').addEventListener('click', nextWeek);
    
