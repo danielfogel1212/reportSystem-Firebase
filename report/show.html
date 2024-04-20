@@ -170,54 +170,15 @@ let currentUserUID =''
         let currentDate = new Date(); // Define currentDate globally
         onAuthStateChanged(auth, (user) => {
     if (user) {
-        // קבלת זיהוי המשתמש הנוכחי
+    
         currentUserUID = user.uid;
         displayCurrentWeek();
-        // כאן תוכל להשתמש ב-UID של המשתמש לעשות משהו
-        console.log("UID של המשתמש הנוכחי: ", currentUserUID);
+       
     } else {
         window.location.href="login.html"
     }
 });
  
-// async function checkUshifts(userid, date, shiftType) {
-//     const shiftsCollectionRef = collection(db, 'shifts');
-
-//     // Query the shifts collection to check if a document with the same user ID and date exists
-//     const querySnapshot =await getDocs(query(shiftsCollectionRef,
-//         where('userId', '==', userid),
-//         where('shiftType', '==', shiftType),
-//         where('date', '==', date)
-//     ));
-
-//     // Check if the query returned any documents
-//     if (!querySnapshot.empty) {
-//         // Query returned documents, so display the user ID
-//         console.log('User ID:', userid);
-
-//         // Get the user document corresponding to the provided user ID
-//         const userDocRef = doc(db, 'users', userid);
-//         const userDocSnapshot = await getDoc(userDocRef);
-
-//         // Check if the user document exists
-//         if (userDocSnapshot.exists()) {
-//             // Extract the email from the user document
-//             const email = userDocSnapshot.data().email;
-//             // Extract the username from the email
-//             const usernameWithoutAt = email.split('@')[0];
-//             console.log(usernameWithoutAt)
-            
-//             return usernameWithoutAt;
-
-//         } else {
-//             // User document doesn't exist
-//             return null;        }
-//     } else {
-//         // No shifts found for the user ID and date
-//         return null;
-//     }
-//     return null;
-// }
 
 async function displayCurrentWeek() {
     let dates = [];
@@ -396,82 +357,6 @@ async function displayCurrentWeek() {
     }
 }
 
-
-
-        // Display the current week on page load
-  
-        
-// Function to add event listeners to select elements
-// Add event listener to the document and use event delegation to handle select element changes
-// document.addEventListener('change', function(event) {
-//     // Check if the target of the event is a select element
-//     if (event.target.tagName === 'SELECT') {
-       
-        
-//         if (event.target.value === 'בית' || event.target.value === 'סטודיו' || event.target.value == '' ) {
-//             // Get the date from the hidden input field next to the select element
-//             const hiddenInput = event.target.nextElementSibling;
-//             const date = hiddenInput.value;
-            
-//             // Log the shift with the selected shiftType and date
-//             logShift(event.target.value, date);
-//         }
-//     }
-// });
-
-// function logShift(shiftType, date) {
-//     // Check if there is a current user
-//     onAuthStateChanged(auth, (user) => {
-//         if (user) {
-//             // Get the UID of the current user
-//             const currentUserUID = user.uid;
-
-//             // Define a reference to the "shifts" collection
-//             const shiftsCollectionRef = collection(db, 'shifts');
-
-//             // Check if a document with the same date exists
-// const queryRef = query(shiftsCollectionRef, 
-//     where('userId', '==', currentUserUID), 
-//     where('date', '==', date), 
-    
-// );            
-//             getDocs(queryRef).then((querySnapshot) => {
-//                 if (!querySnapshot.empty) {
-//                     // Document with the same date already exists, update shiftType
-//                     querySnapshot.forEach((doc) => {
-//                         updateDoc(doc.ref, {
-//                             shiftType: shiftType
-//                         }).then(() => {
-//                             console.log('Shift type updated successfully');
-//                         }).catch((error) => {
-//                             console.error('Error updating shift type: ', error);
-//                         });
-//                     });
-//                 } else {
-//                     // Document with the same date does not exist, create a new one
-//                     addDoc(shiftsCollectionRef, {
-//                         userId: currentUserUID,
-//                         shiftType: shiftType,
-//                         date: date,
-                      
-//                     })
-//                     .then((docRef) => {
-//                         console.log('Shift logged successfully with ID: ', docRef.id);
-//                     })
-//                     .catch((error) => {
-//                         console.error('Error logging shift: ', error);
-//                     });
-//                 }
-//             }).catch((error) => {
-//                 console.error('Error checking for existing document: ', error);
-//             });
-//         } else {
-//             console.log("No user is currently signed in");
-//             // Add code here if needed, e.g., display a message to the user
-//         }
-//     });
-// }
-
 var buttonsEnabled = true;
 
 // Function to handle clicking on the previous week button
@@ -497,7 +382,7 @@ function disableButtons() {
         buttonsEnabled = true;
     }, 1000); // Enable buttons after 1 second (adjust the time as needed)
 }
-// קריאה לפונקציות previousWeek ו-nextWeek עם אירועי לחיצה
+
 document.getElementById('previous-week-button').addEventListener('click', previousWeek);
 document.getElementById('next-week-button').addEventListener('click', nextWeek);
    
