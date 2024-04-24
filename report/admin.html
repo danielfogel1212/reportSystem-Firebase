@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <title>דף אדמין</title>
+    <style>
+       body {
+    direction: rtl;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: white;
+    margin: 0 auto;
+
+}
+
+.container {
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-x: hidden; /* Hide horizontal overflow */
+}
+
+#week-range {
+    display: block;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.week-navigation {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#previous-week-button,
+#next-week-button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#previous-week-button:hover,
+#next-week-button:hover {
+    background-color: #0056b3;
+}
+
+table {
+    width: 100%;
+    max-width: 100vw;
+    border-collapse: collapse;
+    border: 2px solid #333;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+    font-size: 15px;
+    color: black;
+}
+
+th {
+    background-color: #007bff;
+    color: white;
+}
+
+td:first-child {
+    font-weight: bold;
+    text-align: right;
+}
+
+tbody tr:nth-child(odd) {
+    background-color: #f9f9f9; /* Set background color for odd rows */
+}
+
+tbody tr:nth-child(even) {
+    background: #fff; /* Set background color for even rows */
+}
+
+.yellow {
+    color: yellow;
+}
+
+/* Media query for small screens */
+@media (max-width: 600px) {
+    table {
+        font-size: 12px; /* Reduce font size for better fit on small screens */
+    }
+    th, td {
+        padding: 8px; /* Adjust cell padding */
+        font-size: 12px; /* Reduce font size for better fit on small screens */
+    }
+    #previous-week-button,
+    #next-week-button {
+        font-size: 14px; /* Increase button font size for better visibility on small screens */
+    }
+}
+
+            </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" rel="stylesheet">
+</head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Title</title>
+    <!-- Add your CSS and JS links here -->
+</head>
+<body class="sb-nav-fixed">
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+            <a class="navbar-brand" href="#"><img src="enter.jpg" width=50 height=50></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="show.html">לוח משמרות</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">מילוי משמרות</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="exit.html">יציאה</a>
+                    </li> 
+                </ul>
+            </div>
+        </nav>
+    </div>
+
+    <div class="container-fluid"  style="direction: rtl;text-align: center;">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">לוח ראשי</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item active">לוח ראשי</li>
+                </ol>
+
+                    <div class="row">
+                        <div class="col-xl-12 col-md-6">
+                            <div class="card bg-warning text-white mb-4">
+                                <div class="card-body">הצגת עובדים</div>
+                            </div>
+                        </div>
+                    </div>
+               
+                <div class="table-responsive">
+                    <div class="card mb-4" style="direction: rtl;">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            טבלת עובדים
+                        </div>
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>שם עובד</th>
+                                        <th>איימל</th>
+                                        <th>תפקיד</th>
+                                        <th>עריכה</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users">
+                                    <!-- Table content goes here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <center>
+                    <div class="row">
+                        <div class="col-xl-12 col-md-6">
+                            <div class="card bg-success text-white mb-4">
+                                <div class="card-body">הצגת משמרות </div>
+                            </div>
+                        </div>
+                    </div>
+                </center>
+
+                <div class="table-responsive">
+                    <div class="card mb-12" style="direction: rtl;">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            טבלת משמרות
+                        </div>
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>תאריך</th>
+                                        <th>שם משתמש</th>
+                                        <th>משמרת בוקר</th>
+                                        <th>משמרת צהריים</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="shiftsTableBody" style="text-align:right">
+                                    <!-- Shifts data will be dynamically inserted here -->
+                                </tbody>
+                            </table>
+
+                            <div id="sortButtons" style="text-align: center;">
+                                <button id="sortHomeButton" style=" font-size: 14px;" class="btn btn-warning">הצג לפי בית</button>
+                                <button id="sortStudioButton" style="  font-size: 14px;" class="btn btn-primary">הצג לפי סטודיו</button>
+                                <button id="sortAllButton" style="  font-size: 14px;" class="btn btn-success">הצג הכל המשמרות של עובד</button>
+                               <br>
+                                <br>
+                              
+                               
+                                <br>
+                                <select id="usersSelect" class="btn btn-dark">
+                                    <!-- Options will be dynamically inserted here -->
+                                </select>
+                                <br>
+                                <br>
+                                <button id="entire" style="  font-size: 14px;" class="btn btn-success">הצג את כל המשמרות</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="py-4 bg-light mt-auto">
+        <div class="container-fluid px-4">
+            <!-- <div class="d-flex align-items-center justify-content-between small">
+                <div class="text-muted">Copyright &copy; Your Website 2023</div>
+                <div>
+                    <a href="#">Privacy Policy</a>
+                    &middot;
+                    <a href="#">Terms &amp; Conditions</a> -->
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Firebase -->
+    <script type="module">
+       import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js";
+import { getFirestore, where, collection, addDoc, getDoc, query, serverTimestamp ,limitToLast, orderBy, limit, startAfter, startAt, endAt, onSnapshot, doc, getDocs, deleteField, updateDoc, deleteDoc, setDoc } from 'https://www.gstatic.com/firebasejs/9.9.4/firebase-firestore.js';
+import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-auth.js";
+import { getDatabase, ref, set, onValue, onDisconnect } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-database.js";
+
+const firebaseConfig = {
+
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth();
+const db = getFirestore(app);
+let row = ''
+let currentUserUID =''
+let email = ''
+let oldDisplayName= ''
+let id = ''
+let role = ''
+        let currentDate = new Date(); // Define currentDate globally
+        onAuthStateChanged(auth,  async (user) => {
+    if (user) {
+        // קבלת זיהוי המשתמש הנוכחי
+        currentUserUID = user.uid;
+
+    
+        // כאן תוכל להשתמש ב-UID של המשתמש לעשות משהו
+        console.log("UID של המשתמש הנוכחי: ", currentUserUID);
+    } else {
+        window.location.href="login.html"
+    }
+});
+const usersTableBody = document.getElementById('users');
+const usersCollectionRef = collection(db, 'users');
+const userRows = {}; // Store references to existing rows by user ID
+
+try {
+    const unsubscribe = onSnapshot(usersCollectionRef, (querySnapshot) => {
+        // Clear existing rows
+        usersTableBody.innerHTML = '';
+
+        querySnapshot.forEach((doc) => {
+            const userData = doc.data();
+            const userId = doc.id;
+
+            // Create a new row for each user
+            const row = document.createElement('tr');
+            oldDisplayName = userData.displayName;
+            row.innerHTML = `
+                <td>${userData.displayName}</td>
+                <td>${userData.email}</td>
+                <td>${userData.role}</td>
+                <td>
+                    <button type="button" class="btn btn-primary" style="font-size:10px" data-toggle="modal" data-target="#${userId}" data-whatever="${userData.displayName}">עריכה</button>
+                </td>
+            `;
+
+            // Append the row to the table body
+            usersTableBody.appendChild(row);
+
+            // Store reference to the new row
+            userRows[userId] = row;
+
+            // Create and append the modal for each user
+            const modalContent = `
+                <input type="hidden" class="form-control" id="old-${userId}" value="${userData.displayName}">
+                <div class="modal fade" id="${userId}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="recipient-name" class="col-form-label">שם משתמש</label>
+                                        <input type="text" class="form-control" id="recipient-name-${userId}" value="${userData.displayName}">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="recipient-email" class="col-form-label">תפקיד</label>
+                                        <input type="text" class="form-control" id="recipient-role-${userId}" value="${userData.role}">
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" id="close${userId}" data-dismiss="modal">סגור</button>
+                                <button type="button" class="btn btn-primary" id="send-message-${userId}">עדכן פרטים</button>
+                               
+                            </div>
+                            <center>
+                            <div id="details${userId}"></div>
+                            <ceneter>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Append modal content to the document body
+            document.body.insertAdjacentHTML('beforeend', modalContent);
+        });
+    });
+} catch (error) {
+    console.error('Error fetching users:', error);
+}
+
+// Add event listener to the modal when it's fully shown
+$(document).on('show.bs.modal', '.modal', function (event) {
+    var button = $(event.relatedTarget); // Button that triggered the modal
+    var recipient = button.data('whatever'); // Extract info from data-* attributes
+    var modal = $(this);
+    modal.find('.modal-title').text(recipient);
+
+    // Extract userId from modal ID
+    var userId = modal.attr('id');
+
+    // Add event listener to the "Send message" button inside the modal
+    modal.find(`#send-message-${userId}`).on('click', function() {
+        const newDisplayName = document.getElementById(`recipient-name-${userId}`).value;
+        const newRole = document.getElementById(`recipient-role-${userId}`).value;
+        const oldDisplayName = document.getElementById(`old-${userId}`).value;
+        updateUserData(userId, newDisplayName, newRole, oldDisplayName);
+    });
+    
+});
+
+
+// Add event listener to the modal when it's fully show
+
+
+
+// Function to update user data
+async function updateUserData(userId, newDisplayName, newRole, oldDisplayName) {
+
+      
+    try {
+    // Update the user document in Firestore
+    await updateDoc(doc(db, 'users', userId), {
+        displayName: newDisplayName,
+        role: newRole
+    });
+    
+    const successDiv = document.getElementById(`details${userId}`);
+    successDiv.innerHTML = `<div class="alert alert-success" role="alert">הפרטים עודכנו בהצלחה</div>`;
+    
+    // Hide the success message after 5 minutes (300,000 milliseconds)
+    setTimeout(() => {
+        successDiv.innerHTML = ''; // Remove the success message
+    }, 3000); // 5 minutes in milliseconds
+} catch (error) {
+    console.error('Error updating user data:', error);
+}
+
+    // Update shifts collection with the new display name
+    const querySnapshot = await getDocs(query(collection(db, 'shifts'), where('userId', '==', userId)));
+
+    if (!querySnapshot.empty) {
+      
+        querySnapshot.forEach(async (doc) => {
+            try {
+                // Update each document
+                await updateDoc(doc.ref, {
+                    displayName: newDisplayName
+                });
+            
+                console.log('Document updated successfully');
+            } catch (error) {
+                console.error('Error updating document:', error);
+            }
+        });
+    }
+
+}
+document.getElementById('sortAllButton').addEventListener('click', async () => {
+    await displayAllshiftsFromFirebase();
+});
+document.getElementById('sortHomeButton').addEventListener('click', async () => {
+    await displayShiftsFromFirebase('בית');
+});
+
+// Add event listener for sorting by "סטודיו"
+document.getElementById('sortStudioButton').addEventListener('click', async () => {
+    await displayShiftsFromFirebase('סטודיו');
+});
+document.getElementById('entire').addEventListener('click', async () => {
+    await displayEntire();
+});
+
+async function displayEntire(){
+
+    const tableBody = document.getElementById('shiftsTableBody');
+    const shiftsCollection = collection(db, 'shifts');
+    
+    // Clear the table body before appending new data
+    tableBody.innerHTML = '';
+  
+        
+   
+    // Retrieve shifts data from Firebase
+
+
+
+try {
+    const querySnapshot = await getDocs(shiftsCollection);
+    const shiftDataArray = querySnapshot.docs.map(doc => doc.data());
+    // Process the shift data as needed
+
+
+        // Sort the array by displayName and then by date
+        shiftDataArray.sort((a, b) => {
+            // First, compare by displayName
+            const nameComparison = a.displayName.localeCompare(b.displayName);
+            if (nameComparison !== 0) {
+                return nameComparison;
+            }
+            // If names are the same, then compare by date
+            return a.date.localeCompare(b.date);
+        });
+
+        // Process each sorted shift data
+        shiftDataArray.forEach(shiftData => {
+            let { date, displayName, shiftType } = shiftData;
+
+            // Check if the date ends with "m"
+            if(shiftType){
+            const isAfternoonShift = date.endsWith('m');
+            
+            // Create a new row for each shift
+            const row = document.createElement('tr');
+
+            // Create and append table cells for date, display name, shift type, and delete button
+            const dateCell = document.createElement('td');
+            date = date.replace('m', '');
+            dateCell.textContent = date;
+            row.appendChild(dateCell);
+
+            const displayNameCell = document.createElement('td');
+            displayNameCell.textContent = displayName;
+            row.appendChild(displayNameCell);
+
+            const morningShiftCell = document.createElement('td');
+            const afternoonShiftCell = document.createElement('td');
+            
+            // Set shift type based on whether it's morning or afternoon shift
+                if (isAfternoonShift) {
+        afternoonShiftCell.textContent = shiftType;
+        if (shiftType === "בית") {
+            afternoonShiftCell.classList.add('bg-warning');
+            row.appendChild(afternoonShiftCell);
+        } else if (shiftType === "סטודיו") {
+            afternoonShiftCell.classList.add('bg-primary');
+            row.appendChild(afternoonShiftCell);
+        }
+    } else {
+        morningShiftCell.textContent = shiftType;
+        if (shiftType === "בית") {
+            morningShiftCell.classList.add('bg-warning');
+            row.appendChild(morningShiftCell);
+        } else if (shiftType === "סטודיו") {
+            morningShiftCell.classList.add('bg-primary');
+            row.appendChild(morningShiftCell);
+            row.appendChild(morningShiftCell);
+        }
+    }
+            row.appendChild(morningShiftCell);
+            row.appendChild(afternoonShiftCell);
+
+           
+
+            // Append the row to the table body
+            tableBody.appendChild(row);
+        }
+        });
+    
+    } catch (error) {
+        console.error('Error displaying shifts:', error);
+    }
+
+}
+
+async function displayShiftsFromFirebase(type) {
+    const tableBody = document.getElementById('shiftsTableBody');
+
+    // Clear the table body before appending new data
+    tableBody.innerHTML = '';
+    let name = document.getElementById('usersSelect').value
+    // Retrieve shifts data from Firebase
+    const shiftsCollection = collection(db, 'shifts');
+    
+    const shiftsQuery = query(shiftsCollection, 
+    where('shiftType', '==', type),
+    where('displayName', '==', name)
+);
+
+try {
+    const querySnapshot = await getDocs(shiftsQuery);
+    const shiftDataArray = querySnapshot.docs.map(doc => doc.data());
+    // Process the shift data as needed
+
+
+        // Sort the array by displayName and then by date
+        shiftDataArray.sort((a, b) => {
+            // First, compare by displayName
+            const nameComparison = a.displayName.localeCompare(b.displayName);
+            if (nameComparison !== 0) {
+                return nameComparison;
+            }
+            // If names are the same, then compare by date
+            return a.date.localeCompare(b.date);
+        });
+
+        // Process each sorted shift data
+        shiftDataArray.forEach(shiftData => {
+            let { date, displayName, shiftType } = shiftData;
+
+            // Check if the date ends with "m"
+            if(shiftType){
+            const isAfternoonShift = date.endsWith('m');
+            
+            // Create a new row for each shift
+            const row = document.createElement('tr');
+
+            // Create and append table cells for date, display name, shift type, and delete button
+            const dateCell = document.createElement('td');
+            date = date.replace('m', '');
+            dateCell.textContent = date;
+            row.appendChild(dateCell);
+
+            const displayNameCell = document.createElement('td');
+            displayNameCell.textContent = displayName;
+            row.appendChild(displayNameCell);
+
+            const morningShiftCell = document.createElement('td');
+            const afternoonShiftCell = document.createElement('td');
+            
+            // Set shift type based on whether it's morning or afternoon shift
+                if (isAfternoonShift) {
+        afternoonShiftCell.textContent = shiftType;
+        if (shiftType === "בית") {
+            afternoonShiftCell.classList.add('bg-warning');
+            row.appendChild(afternoonShiftCell);
+        } else if (shiftType === "סטודיו") {
+            afternoonShiftCell.classList.add('bg-primary');
+            row.appendChild(afternoonShiftCell);
+        }
+    } else {
+        morningShiftCell.textContent = shiftType;
+        if (shiftType === "בית") {
+            morningShiftCell.classList.add('bg-warning');
+            row.appendChild(morningShiftCell);
+        } else if (shiftType === "סטודיו") {
+            morningShiftCell.classList.add('bg-primary');
+            row.appendChild(morningShiftCell);
+            row.appendChild(morningShiftCell);
+        }
+    }
+            row.appendChild(morningShiftCell);
+            row.appendChild(afternoonShiftCell);
+
+       
+         
+
+            // Append the row to the table body
+            tableBody.appendChild(row);
+        }
+        });
+    
+    } catch (error) {
+        console.error('Error displaying shifts:', error);
+    }
+}
+
+// Call the function to initially display the shifts
+async function displayAllshiftsFromFirebase() {
+    const tableBody = document.getElementById('shiftsTableBody');
+    const shiftsCollection = collection(db, 'shifts');
+    
+    // Clear the table body before appending new data
+    tableBody.innerHTML = '';
+  
+         let name = document.getElementById('usersSelect').value
+    const shiftsQuery = query(shiftsCollection, where('displayName','==',name));
+   
+    // Retrieve shifts data from Firebase
+
+
+
+try {
+    const querySnapshot = await getDocs(shiftsQuery);
+    const shiftDataArray = querySnapshot.docs.map(doc => doc.data());
+    // Process the shift data as needed
+
+
+        // Sort the array by displayName and then by date
+        shiftDataArray.sort((a, b) => {
+            // First, compare by displayName
+            const nameComparison = a.displayName.localeCompare(b.displayName);
+            if (nameComparison !== 0) {
+                return nameComparison;
+            }
+            // If names are the same, then compare by date
+            return a.date.localeCompare(b.date);
+        });
+
+        // Process each sorted shift data
+        shiftDataArray.forEach(shiftData => {
+            let { date, displayName, shiftType } = shiftData;
+
+            // Check if the date ends with "m"
+            if(shiftType){
+            const isAfternoonShift = date.endsWith('m');
+            
+            // Create a new row for each shift
+            const row = document.createElement('tr');
+
+            // Create and append table cells for date, display name, shift type, and delete button
+            const dateCell = document.createElement('td');
+            date = date.replace('m', '');
+            dateCell.textContent = date;
+            row.appendChild(dateCell);
+
+            const displayNameCell = document.createElement('td');
+            displayNameCell.textContent = displayName;
+            row.appendChild(displayNameCell);
+
+            const morningShiftCell = document.createElement('td');
+            const afternoonShiftCell = document.createElement('td');
+            
+            // Set shift type based on whether it's morning or afternoon shift
+                if (isAfternoonShift) {
+        afternoonShiftCell.textContent = shiftType;
+        if (shiftType === "בית") {
+            afternoonShiftCell.classList.add('bg-warning');
+            row.appendChild(afternoonShiftCell);
+        } else if (shiftType === "סטודיו") {
+            afternoonShiftCell.classList.add('bg-primary');
+            row.appendChild(afternoonShiftCell);
+        }
+    } else {
+        morningShiftCell.textContent = shiftType;
+        if (shiftType === "בית") {
+            morningShiftCell.classList.add('bg-warning');
+            row.appendChild(morningShiftCell);
+        } else if (shiftType === "סטודיו") {
+            morningShiftCell.classList.add('bg-primary');
+            row.appendChild(morningShiftCell);
+            row.appendChild(morningShiftCell);
+        }
+    }
+            row.appendChild(morningShiftCell);
+            row.appendChild(afternoonShiftCell);
+
+           
+
+            // Append the row to the table body
+            tableBody.appendChild(row);
+        }
+        });
+    
+    } catch (error) {
+        console.error('Error displaying shifts:', error);
+    }
+
+}
+// Call the function to initially display the shifts
+
+async function displayUsersInSelect() {
+    const usersSelect = document.getElementById('usersSelect');
+
+    // Clear the select element before appending new options
+    usersSelect.innerHTML = '';
+
+    try {
+        // Retrieve users data from Firebase
+        const usersCollection = collection(db, 'users');
+        const querySnapshot = await getDocs(usersCollection);
+        
+        // Process the users data
+        querySnapshot.forEach(userDoc => {
+            const userData = userDoc.data();
+            const userId = userDoc.id;
+
+            // Create an option element for each user
+            const option = document.createElement('option');
+            option.value = userData.displayName; // Set the value of the option to the user ID
+            option.textContent = userData.displayName; // Set the text content of the option to the user's display name
+            
+            // Append the option to the select element
+            usersSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error displaying users:', error);
+    }
+  
+}
+displayUsersInSelect()
+
+// Add event listener to the select element
+const usersSelect = document.getElementById('usersSelect');
+usersSelect.addEventListener('change', displayAllshiftsFromFirebase);
+// Call the function to initially display the users in the select element
+
+
+
+    </script>
+
+</body>
+</html>
