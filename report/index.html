@@ -171,7 +171,13 @@ import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "htt
 import { getDatabase, ref, set, onValue, onDisconnect } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-database.js";
 
 const firebaseConfig = {
-
+  apiKey: "AIzaSyB87m7IcXd1gqnSYZEBXqwpQIQbOItRwqY",
+  authDomain: "todos-e7e2f.firebaseapp.com",
+  databaseURL: "https://todos-e7e2f-default-rtdb.firebaseio.com",
+  projectId: "todos-e7e2f",
+  storageBucket: "todos-e7e2f.appspot.com",
+  messagingSenderId: "523425205783",
+  appId: "1:523425205783:web:6fd93bb6f354c361541652"
 };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
@@ -293,15 +299,14 @@ function displayCurrentWeek() {
 
                 // Create rows for each day of the week
                 const rowMorning = document.createElement('tr');
-rowMorning.innerHTML = `
-<td class="bg-primary" style="text-align:center"><i class="fas fa-calendar-alt"></i></td>
 
-    <td class="bg-secondary">${weekStart.getDate()}</td>
-    <td class="bg-success">${weekStart.getDate() + 1}</td>
-    <td class="bg-danger">${weekStart.getDate() + 2}</td>
-    <td class="bg-warning">${weekStart.getDate() + 3}</td>
-    <td class="bg-info">${weekStart.getDate() + 4}</td>
-`;
+                rowMorning.innerHTML = `
+<td class="bg-primary" style="text-align:center"><i class="fas fa-calendar-alt"></i></td>
+<td class="bg-secondary">${weekStart.getDate()}</td>
+<td class="bg-success">${new Date(weekStart.getTime() + (1 * 24 * 60 * 60 * 1000)).getDate()}</td>
+<td class="bg-danger">${new Date(weekStart.getTime() + (2 * 24 * 60 * 60 * 1000)).getDate()}</td>
+<td class="bg-warning">${new Date(weekStart.getTime() + (3 * 24 * 60 * 60 * 1000)).getDate()}</td>
+<td class="bg-info">${new Date(weekStart.getTime() + (4 * 24 * 60 * 60 * 1000)).getDate()}</td>`
 
                 const rowMorningShift = document.createElement('tr');
                 rowMorningShift.innerHTML = row1InnerHtmlMorning; // Populate the row with morning shift HTML
