@@ -166,7 +166,7 @@ import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "htt
 import { getDatabase, ref, set, onValue, onDisconnect } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-database.js";
 
 const firebaseConfig = {
- 
+
 };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
@@ -361,14 +361,13 @@ number1=0
             // Create rows for each day of the week
             const rowMorning = document.createElement('tr');
             rowMorning.innerHTML = `
-                <td>תאריך</td>
-                <td>${weekStart.getDate()}</td>
-                <td>${weekStart.getDate() + 1}</td>
-                <td>${weekStart.getDate() + 2}</td>
-                <td>${weekStart.getDate() + 3}</td>
-                <td>${weekStart.getDate() + 4}</td>
-            `;
-
+<td>תאריך</td>
+<td>${new Date(weekStart.getTime()).getDate()}</td>
+<td>${new Date(weekStart.getTime() + (1 * 24 * 60 * 60 * 1000)).getDate()}</td>
+<td>${new Date(weekStart.getTime() + (2 * 24 * 60 * 60 * 1000)).getDate()}</td>
+<td>${new Date(weekStart.getTime() + (3 * 24 * 60 * 60 * 1000)).getDate()}</td>
+<td>${new Date(weekStart.getTime() + (4 * 24 * 60 * 60 * 1000)).getDate()}</td>
+`;
             const rowMorningShift = document.createElement('tr');
             rowMorningShift.innerHTML = row1InnerHtmlMorning; // Populate the row with morning shift HTML
 
