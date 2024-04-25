@@ -9,11 +9,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <title>דף אדמין</title>
     <style>
-       body {
-            direction: rtl;
+     body {
+            direction: "rtl";
             font-family: Arial, sans-serif;
             margin: 0;
-            
+            padding: 0;
             background: white;
         }
 
@@ -95,8 +95,8 @@
     }
     th, td {
         border: 1px solid #ccc;
-        padding: 2px;
-        text-align: center;
+     
+       
         font-size: 9px;
     }
     .btn.btn-primary {
@@ -109,87 +109,82 @@
     }
 }
 
-
             </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" rel="stylesheet">
-</head>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Title</title>
-    <!-- Add your CSS and JS links here -->
-</head>
-<body class="sb-nav-fixed">
+
+<body class="sb-nav-fixed" style="direction:rtl">
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <div class="container-fluid">
-        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-            <a class="navbar-brand" href="#"><img src="enter.jpg" width=50 height=50></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="collapsibleNavbar">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="show.html">לוח משמרות</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">מילוי משמרות</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="exit.html">יציאה</a>
-                    </li> 
-                </ul>
-            </div>
-        </nav>
+      <a class="navbar-brand" href="#"><img src="enter.jpg" width=50 height=50></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="show.html">לוח משמרות</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">מילוי משמרות</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="exit.html">יציאה</a>
+          </li> 
+        </ul>
+      </div>
     </div>
-
-    <div class="container-fluid" style="direction: rtl;">
+  </nav>
+    <div id="layoutSidenav_content">
         <main>
+            <center>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">לוח ראשי</h1>
+                <h1 class="mt-4">לוח מנהל</h1>
                 <ol class="breadcrumb mb-4">
-                    <li class="breadcrumb-item active">לוח ראשי</li>
+                  
                 </ol>
-
-                <center>
-                    <div class="row">
-                        <div class="col-xl-3 col-md-6">
-                            <div class="card bg-warning text-white mb-4">
-                                <div class="card-body">הצגת עובדים</div>
-                            </div>
-                        </div>
+            </center>
+                <div class="table-responsive" style="text-align: center;">
+                <div class="card mb-4" style="direction: ltr;">
+                    <div class="card-header">
+                        <i class="fas fa-table me-1"></i>
+                       טבלת עובדים
                     </div>
-                </center>
-                <div class="table-responsive">
-                    <div class="card mb-4" style="direction: rtl;">
-                        <div class="card-header">
-                            <i class="fas fa-table me-1"></i>
-                            טבלת עובדים
-                        </div>
-                        <div class="card-body">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>שם עובד</th>
-                                        <th>איימל</th>
-                                        <th>תפקיד</th>
-                                        <th>עריכה</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="users">
-                                    <!-- Table content goes here -->
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <thead>
+                                <tr style="text-align: right;">
+                                   <td >עריכה</td>
+                                   <td>אימייל</td>
+                                   <td>תפקיד</td>
+                                   <td>שם משתמש</td>
+
+
+                        
+                            </thead>
+                            
+                            <tbody id="users" style="direction: ltr;">
+                                <!-- Table content goes here -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+            </div>
+        </main>
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                  
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
 
                 <center>
                     <div class="row">
-                        <div class="col-xl-3 col-md-6">
+                        <div class="col-xl-12 col-md-6">
                             <div class="card bg-success text-white mb-4">
                                 <div class="card-body">הצגת משמרות </div>
                             </div>
@@ -197,7 +192,7 @@
                     </div>
                 </center>
 
-                <div class="table-responsive">
+                <div class="table-responsive" style="text-align: center;">
                     <div class="card mb-12" style="direction: rtl;">
                         <div class="card-header">
                             <i class="fas fa-table me-1"></i>
@@ -221,19 +216,27 @@
                             <div id="sortButtons" style="text-align: center;">
                                 <button id="sortHomeButton" style=" font-size: 14px;" class="btn btn-warning">הצג לפי בית</button>
                                 <button id="sortStudioButton" style="  font-size: 14px;" class="btn btn-primary">הצג לפי סטודיו</button>
-                                <br><br>
-                                <button id="sortAllButton" style="  font-size: 14px;" class="btn btn-success">הצג הכל המשמרות של עובד</button>
+                             
                                <br>
                                 <br>
-                              
-                               
+                                <button id="sortAllButton" style="  font-size: 14px;" class="btn btn-success">הצג הכל המשמרות של עובד</button
                                 <br>
+                               
+                                <br><br>
                                 <select id="usersSelect" class="btn btn-dark">
                                     <!-- Options will be dynamically inserted here -->
                                 </select>
                                 <br>
                                 <br>
                                 <button id="entire" style="  font-size: 14px;" class="btn btn-success">הצג את כל המשמרות</button>
+                                <br><br>
+                        <div style="text-align: center;">
+    <label for="start-date" style="display: block; margin-bottom: 5px;">בחר תאריך התחלה</label>
+    <input type="date" id="select-date" style="width: 200px; padding: 8px; border-radius: 5px; border: 1px solid #ccc; margin-bottom: 10px;">
+    
+    <label for="end-date" style="display: block; margin-bottom: 5px;">בחר תאריך סוף</label>
+    <input type="date" id="select-date1" style="width: 200px; padding: 8px; border-radius: 5px; border: 1px solid #ccc;">
+</div>
 
                             </div>
                         </div>
@@ -245,12 +248,12 @@
 
     <footer class="py-4 bg-light mt-auto">
         <div class="container-fluid px-4">
-            <div class="d-flex align-items-center justify-content-between small">
+            <!-- <div class="d-flex align-items-center justify-content-between small">
                 <div class="text-muted">Copyright &copy; Your Website 2023</div>
                 <div>
                     <a href="#">Privacy Policy</a>
                     &middot;
-                    <a href="#">Terms &amp; Conditions</a>
+                    <a href="#">Terms &amp; Conditions</a> -->
                 </div>
             </div>
         </div>
@@ -268,7 +271,13 @@ import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "htt
 import { getDatabase, ref, set, onValue, onDisconnect } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-database.js";
 
 const firebaseConfig = {
-
+  apiKey: "AIzaSyB87m7IcXd1gqnSYZEBXqwpQIQbOItRwqY",
+  authDomain: "todos-e7e2f.firebaseapp.com",
+  databaseURL: "https://todos-e7e2f-default-rtdb.firebaseio.com",
+  projectId: "todos-e7e2f",
+  storageBucket: "todos-e7e2f.appspot.com",
+  messagingSenderId: "523425205783",
+  appId: "1:523425205783:web:6fd93bb6f354c361541652"
 };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
@@ -279,7 +288,23 @@ let email = ''
 let oldDisplayName= ''
 let id = ''
 let role = ''
-        let currentDate = new Date(); // Define currentDate globally
+var today = new Date();
+
+    // Get the first day of the current month
+    var firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+
+    // Get the last day of the current month
+    var lastDayOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+
+    // Format the dates as YYYY-MM-DD strings
+    var firstDayFormatted = firstDayOfMonth.toISOString().split('T')[0];
+    var lastDayFormatted = lastDayOfMonth.toISOString().split('T')[0];
+
+    // Set the default values for the date inputs
+    document.getElementById("select-date").value = firstDayFormatted;
+    document.getElementById("select-date1").value = lastDayFormatted;
+let currentDate = new Date(); // Define currentDate globally
+
         onAuthStateChanged(auth,  async (user) => {
     if (user) {
         // קבלת זיהוי המשתמש הנוכחי
@@ -309,12 +334,15 @@ try {
             const row = document.createElement('tr');
             oldDisplayName = userData.displayName;
             row.innerHTML = `
-                <td>${userData.displayName}</td>
-                <td>${userData.email}</td>
-                <td>${userData.role}</td>
-                <td>
+            <td>
                     <button type="button" class="btn btn-primary" style="font-size:10px" data-toggle="modal" data-target="#${userId}" data-whatever="${userData.displayName}">עריכה</button>
                 </td>
+                <td>${userData.role}</td>
+                <td>${userData.email}</td>
+              
+                <td>${userData.displayName}</td>
+
+                
             `;
 
             // Append the row to the table body
@@ -484,9 +512,69 @@ try {
         // Process each sorted shift data
         shiftDataArray.forEach(shiftData => {
             let { date, displayName, shiftType } = shiftData;
+let date2=''
+             if(date.endsWith("m")){
+                date2 = date.slice(0, -1);
+              
+                console.log(date2)
+             }
+             else{
+               date2=date
+               console.log(date2)
+               
+             }
 
-            // Check if the date ends with "m"
-            if(shiftType){
+        
+  // Split the date string into day, month, and year parts
+  const parts = date2.split('/').map(part => {
+    // Add leading zero if necessary
+    return part.length === 1 ? '0' + part : part;
+}).join('-');
+
+const reversedParts = parts.split('-').reverse().join('-');
+
+
+let dateStr = reversedParts;
+
+// Parse the date string into a Date object
+let dateObject12 = new Date(dateStr);
+
+// Check if the dateStr is in a valid format
+
+
+// Get the number of milliseconds since January 1, 1970
+let midDate = dateObject12.getTime();
+console.log(midDate)
+
+
+let date1 = document.getElementById("select-date").value
+let dateStart =date1
+
+// Parse the date string into a Date object
+let dateObject = new Date(dateStart);
+
+// Get the number of dateObject.getTime();milliseconds since January 1, 1970
+let dateNumberStart = dateObject.getTime();
+
+
+
+
+let dateEND1 = document.getElementById("select-date1").value
+let dateEND  = dateEND1
+// Parse the date string into a Date object
+let dateObject1 = new Date(dateEND);
+
+// Get the number of milliseconds since January 1, 1970
+let dateNumberEnd = dateObject1.getTime();
+
+
+
+
+
+console.log(dateNumberEnd);
+console.log(midDate);
+console.log(dateNumberStart)
+       if(shiftType &&  dateNumberStart <=midDate && dateNumberEnd >= midDate){
             const isAfternoonShift = date.endsWith('m');
             
             // Create a new row for each shift
@@ -573,12 +661,72 @@ try {
             return a.date.localeCompare(b.date);
         });
 
-        // Process each sorted shift data
         shiftDataArray.forEach(shiftData => {
             let { date, displayName, shiftType } = shiftData;
+let date2=''
+             if(date.endsWith("m")){
+                date2 = date.slice(0, -1);
+              
+                console.log(date2)
+             }
+             else{
+               date2=date
+               console.log(date2)
+               
+             }
 
-            // Check if the date ends with "m"
-            if(shiftType){
+        
+  // Split the date string into day, month, and year parts
+  const parts = date2.split('/').map(part => {
+    // Add leading zero if necessary
+    return part.length === 1 ? '0' + part : part;
+}).join('-');
+
+const reversedParts = parts.split('-').reverse().join('-');
+
+
+let dateStr = reversedParts;
+
+// Parse the date string into a Date object
+let dateObject12 = new Date(dateStr);
+
+// Check if the dateStr is in a valid format
+
+
+// Get the number of milliseconds since January 1, 1970
+let midDate = dateObject12.getTime();
+console.log(midDate)
+
+
+let date1 = document.getElementById("select-date").value
+let dateStart =date1
+
+// Parse the date string into a Date object
+let dateObject = new Date(dateStart);
+
+// Get the number of dateObject.getTime();milliseconds since January 1, 1970
+let dateNumberStart = dateObject.getTime();
+
+
+
+
+let dateEND1 = document.getElementById("select-date1").value
+let dateEND  = dateEND1
+// Parse the date string into a Date object
+let dateObject1 = new Date(dateEND);
+
+// Get the number of milliseconds since January 1, 1970
+let dateNumberEnd = dateObject1.getTime();
+
+
+
+
+
+console.log(dateNumberEnd);
+console.log(midDate);
+console.log(dateNumberStart)
+       if(shiftType &&  dateNumberStart <=midDate && dateNumberEnd >= midDate){
+           
             const isAfternoonShift = date.endsWith('m');
             
             // Create a new row for each shift
@@ -669,9 +817,69 @@ try {
         // Process each sorted shift data
         shiftDataArray.forEach(shiftData => {
             let { date, displayName, shiftType } = shiftData;
+let date2=''
+             if(date.endsWith("m")){
+                date2 = date.slice(0, -1);
+              
+                console.log(date2)
+             }
+             else{
+               date2=date
+               console.log(date2)
+               
+             }
 
-            // Check if the date ends with "m"
-            if(shiftType){
+        
+  // Split the date string into day, month, and year parts
+  const parts = date2.split('/').map(part => {
+    // Add leading zero if necessary
+    return part.length === 1 ? '0' + part : part;
+}).join('-');
+
+const reversedParts = parts.split('-').reverse().join('-');
+
+
+let dateStr = reversedParts;
+
+// Parse the date string into a Date object
+let dateObject12 = new Date(dateStr);
+
+// Check if the dateStr is in a valid format
+
+
+// Get the number of milliseconds since January 1, 1970
+let midDate = dateObject12.getTime();
+console.log(midDate)
+
+
+let date1 = document.getElementById("select-date").value
+let dateStart =date1
+
+// Parse the date string into a Date object
+let dateObject = new Date(dateStart);
+
+// Get the number of dateObject.getTime();milliseconds since January 1, 1970
+let dateNumberStart = dateObject.getTime();
+
+
+
+
+let dateEND1 = document.getElementById("select-date1").value
+let dateEND  = dateEND1
+// Parse the date string into a Date object
+let dateObject1 = new Date(dateEND);
+
+// Get the number of milliseconds since January 1, 1970
+let dateNumberEnd = dateObject1.getTime();
+
+
+
+
+
+console.log(dateNumberEnd);
+console.log(midDate);
+console.log(dateNumberStart)
+       if(shiftType &&  dateNumberStart <=midDate && dateNumberEnd >= midDate){
             const isAfternoonShift = date.endsWith('m');
             
             // Create a new row for each shift
@@ -762,9 +970,6 @@ displayUsersInSelect()
 // Add event listener to the select element
 const usersSelect = document.getElementById('usersSelect');
 usersSelect.addEventListener('change', displayAllshiftsFromFirebase);
-// Call the function to initially display the users in the select element
-
-
 
     </script>
 
