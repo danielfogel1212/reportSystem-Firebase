@@ -219,7 +219,7 @@
                              
                                <br>
                                 <br>
-                                <button id="sortAllButton" style="  font-size: 14px;" class="btn btn-success">הצג הכל המשמרות של עובד</button
+                                <button id="sortAllButton" style="  font-size: 14px;" class="btn btn-success">הצג משמרות</button
                                 <br>
                                
                                 <br><br>
@@ -228,7 +228,7 @@
                                 </select>
                                 <br>
                                 <br>
-                                <button id="entire" style="  font-size: 14px;" class="btn btn-success">הצג את כל המשמרות</button>
+                                <!-- <button id="entire" style="  font-size: 14px;" class="btn btn-success">הצג את כל המשמרות</button> -->
                                 <br><br>
                         <div style="text-align: center;">
     <label for="start-date" style="display: block; margin-bottom: 5px;">בחר תאריך התחלה</label>
@@ -271,7 +271,13 @@ import { getAuth, createUserWithEmailAndPassword, onAuthStateChanged } from "htt
 import { getDatabase, ref, set, onValue, onDisconnect } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-database.js";
 
 const firebaseConfig = {
-
+  apiKey: "AIzaSyB87m7IcXd1gqnSYZEBXqwpQIQbOItRwqY",
+  authDomain: "todos-e7e2f.firebaseapp.com",
+  databaseURL: "https://todos-e7e2f-default-rtdb.firebaseio.com",
+  projectId: "todos-e7e2f",
+  storageBucket: "todos-e7e2f.appspot.com",
+  messagingSenderId: "523425205783",
+  appId: "1:523425205783:web:6fd93bb6f354c361541652"
 };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth();
@@ -468,175 +474,32 @@ document.getElementById('sortHomeButton').addEventListener('click', async () => 
 document.getElementById('sortStudioButton').addEventListener('click', async () => {
     await displayShiftsFromFirebase('סטודיו');
 });
-document.getElementById('entire').addEventListener('click', async () => {
-    await displayEntire();
-});
-
-async function displayEntire(){
-
-    const tableBody = document.getElementById('shiftsTableBody');
-    const shiftsCollection = collection(db, 'shifts');
-    
-    // Clear the table body before appending new data
-    tableBody.innerHTML = '';
-  
-        
-   
-    // Retrieve shifts data from Firebase
-
-
-
-try {
-    const querySnapshot = await getDocs(shiftsCollection);
-    const shiftDataArray = querySnapshot.docs.map(doc => doc.data());
-    // Process the shift data as needed
-
-
-        // Sort the array by displayName and then by date
-        shiftDataArray.sort((a, b) => {
-            // First, compare by displayName
-            const nameComparison = a.displayName.localeCompare(b.displayName);
-            if (nameComparison !== 0) {
-                return nameComparison;
-            }
-            // If names are the same, then compare by date
-            return a.date.localeCompare(b.date);
-        });
-
-        // Process each sorted shift data
-        shiftDataArray.forEach(shiftData => {
-            let { date, displayName, shiftType } = shiftData;
-let date2=''
-             if(date.endsWith("m")){
-                date2 = date.slice(0, -1);
-              
-                console.log(date2)
-             }
-             else{
-               date2=date
-               console.log(date2)
-               
-             }
-
-        
-  // Split the date string into day, month, and year parts
-  const parts = date2.split('/').map(part => {
-    // Add leading zero if necessary
-    return part.length === 1 ? '0' + part : part;
-}).join('-');
-
-const reversedParts = parts.split('-').reverse().join('-');
-
-
-let dateStr = reversedParts;
-
-// Parse the date string into a Date object
-let dateObject12 = new Date(dateStr);
-
-// Check if the dateStr is in a valid format
-
-
-// Get the number of milliseconds since January 1, 1970
-let midDate = dateObject12.getTime();
-console.log(midDate)
-
-
-let date1 = document.getElementById("select-date").value
-let dateStart =date1
-
-// Parse the date string into a Date object
-let dateObject = new Date(dateStart);
-
-// Get the number of dateObject.getTime();milliseconds since January 1, 1970
-let dateNumberStart = dateObject.getTime();
-
-
-
-
-let dateEND1 = document.getElementById("select-date1").value
-let dateEND  = dateEND1
-// Parse the date string into a Date object
-let dateObject1 = new Date(dateEND);
-
-// Get the number of milliseconds since January 1, 1970
-let dateNumberEnd = dateObject1.getTime();
-
-
-
-
-
-console.log(dateNumberEnd);
-console.log(midDate);
-console.log(dateNumberStart)
-       if(shiftType &&  dateNumberStart <=midDate && dateNumberEnd >= midDate){
-            const isAfternoonShift = date.endsWith('m');
-            
-            // Create a new row for each shift
-            const row = document.createElement('tr');
-
-            // Create and append table cells for date, display name, shift type, and delete button
-            const dateCell = document.createElement('td');
-            date = date.replace('m', '');
-            dateCell.textContent = date;
-            row.appendChild(dateCell);
-
-            const displayNameCell = document.createElement('td');
-            displayNameCell.textContent = displayName;
-            row.appendChild(displayNameCell);
-
-            const morningShiftCell = document.createElement('td');
-            const afternoonShiftCell = document.createElement('td');
-            
-            // Set shift type based on whether it's morning or afternoon shift
-                if (isAfternoonShift) {
-        afternoonShiftCell.textContent = shiftType;
-        if (shiftType === "בית") {
-            afternoonShiftCell.classList.add('bg-warning');
-            row.appendChild(afternoonShiftCell);
-        } else if (shiftType === "סטודיו") {
-            afternoonShiftCell.classList.add('bg-primary');
-            row.appendChild(afternoonShiftCell);
-        }
-    } else {
-        morningShiftCell.textContent = shiftType;
-        if (shiftType === "בית") {
-            morningShiftCell.classList.add('bg-warning');
-            row.appendChild(morningShiftCell);
-        } else if (shiftType === "סטודיו") {
-            morningShiftCell.classList.add('bg-primary');
-            row.appendChild(morningShiftCell);
-            row.appendChild(morningShiftCell);
-        }
-    }
-            row.appendChild(morningShiftCell);
-            row.appendChild(afternoonShiftCell);
-
-           
-
-            // Append the row to the table body
-            tableBody.appendChild(row);
-        }
-        });
-    
-    } catch (error) {
-        console.error('Error displaying shifts:', error);
-    }
-
-}
 
 async function displayShiftsFromFirebase(type) {
     const tableBody = document.getElementById('shiftsTableBody');
 
     // Clear the table body before appending new data
     tableBody.innerHTML = '';
-    let name = document.getElementById('usersSelect').value
-    // Retrieve shifts data from Firebase
-    const shiftsCollection = collection(db, 'shifts');
     
-    const shiftsQuery = query(shiftsCollection, 
+// Assuming 'usersSelect' is the ID of your select element
+let selectElement = document.getElementById('usersSelect');
+let selectedOption = selectElement.options[selectElement.selectedIndex];
+let name = selectedOption.textContent;
+
+
+
+    let shiftsCollection = collection(db, 'shifts');
+    
+    let shiftsQuery = query(shiftsCollection, 
     where('shiftType', '==', type),
     where('displayName', '==', name)
 );
+if (name === "כולם") {
+     shiftsQuery = query(shiftsCollection, 
+    where('shiftType', '==', type),
+);
+   
+}
 
 try {
     const querySnapshot = await getDocs(shiftsQuery);
@@ -715,10 +578,6 @@ let dateNumberEnd = dateObject1.getTime();
 
 
 
-
-console.log(dateNumberEnd);
-console.log(midDate);
-console.log(dateNumberStart)
        if(shiftType &&  dateNumberStart <=midDate && dateNumberEnd >= midDate){
            
             const isAfternoonShift = date.endsWith('m');
@@ -778,15 +637,32 @@ console.log(dateNumberStart)
 
 // Call the function to initially display the shifts
 async function displayAllshiftsFromFirebase() {
-    const tableBody = document.getElementById('shiftsTableBody');
-    const shiftsCollection = collection(db, 'shifts');
     
-    // Clear the table body before appending new data
-    tableBody.innerHTML = '';
-  
-         let name = document.getElementById('usersSelect').value
-    const shiftsQuery = query(shiftsCollection, where('displayName','==',name));
-   
+    const tableBody = document.getElementById('shiftsTableBody');
+const shiftsCollection = collection(db, 'shifts');
+
+// Clear the table body before appending new data
+tableBody.innerHTML = '';
+
+// Get the selected user's display name
+let selectElement = document.getElementById('usersSelect');
+let selectedOption = selectElement.options[selectElement.selectedIndex];
+let name2 = selectedOption.textContent;
+
+// Define the initial query
+let shiftsQuery;
+
+// Check if all users are selected
+if (name2 === "כולם") {
+    // If so, query all shifts
+    shiftsQuery = shiftsCollection;
+} else {
+    // Otherwise, filter shifts by the selected user's display name
+    shiftsQuery = query(shiftsCollection, where('displayName', '==', name2));
+}
+
+// Now, you can use the shiftsQuery as needed
+
     // Retrieve shifts data from Firebase
 
 
@@ -815,11 +691,10 @@ let date2=''
              if(date.endsWith("m")){
                 date2 = date.slice(0, -1);
               
-                console.log(date2)
              }
              else{
                date2=date
-               console.log(date2)
+              
                
              }
 
@@ -937,26 +812,37 @@ async function displayUsersInSelect() {
     usersSelect.innerHTML = '';
 
     try {
-        // Retrieve users data from Firebase
-        const usersCollection = collection(db, 'users');
-        const querySnapshot = await getDocs(usersCollection);
-        
-        // Process the users data
-        querySnapshot.forEach(userDoc => {
-            const userData = userDoc.data();
-            const userId = userDoc.id;
+    // Retrieve users data from Firebase
+    const usersCollection = collection(db, 'users');
+    const querySnapshot = await getDocs(usersCollection);
+    
+    // Process the users data
+    querySnapshot.forEach(userDoc => {
+        const userData = userDoc.data();
+        const userId = userDoc.id;
 
-            // Create an option element for each user
-            const option = document.createElement('option');
-            option.value = userData.displayName; // Set the value of the option to the user ID
-            option.textContent = userData.displayName; // Set the text content of the option to the user's display name
-            
-            // Append the option to the select element
-            usersSelect.appendChild(option);
-        });
-    } catch (error) {
-        console.error('Error displaying users:', error);
-    }
+        // Create an option element for each user
+        const option = document.createElement('option');
+        option.value = userData.displayName; // Set the value of the option to the user ID
+        option.textContent = userData.displayName; // Set the text content of the option to the user's display name
+        
+        // Append the option to the select element
+        usersSelect.appendChild(option);
+    });
+
+    // Set a default option after populating the select element
+    const defaultOption = document.createElement('option');
+    defaultOption.value = "default";
+    defaultOption.textContent = "כולם";
+    defaultOption.selected = true; // Make it selected by default
+    usersSelect.insertBefore(defaultOption, usersSelect.firstChild);
+
+} catch (error) {
+    console.error('Error fetching users:', error);
+}
+
+    
+    
   
 }
 displayUsersInSelect()
