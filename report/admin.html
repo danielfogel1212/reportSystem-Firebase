@@ -226,10 +226,18 @@
                                 <select id="usersSelect" class="btn btn-dark">
                                     <!-- Options will be dynamically inserted here -->
                                 </select>
+<br>
                                 <br>
-                                <br>
-                                <!-- <button id="entire" style="  font-size: 14px;" class="btn btn-success">הצג את כל המשמרות</button> -->
-                                <br><br>
+                                <div>
+                                    <button  class="btn btn-success" id="downloadExcelButton">הורד קובץ אקסל</button>
+                                </div>
+                                <div>
+                                    <!-- הטבלה שלך תופיע כאן -->
+                                    <table id="shiftsTableBody">
+                                        <!-- השורות של הטבלה יתווספו כאן דינמית -->
+                                    </table>
+                                </div>
+                                                                <br><br>
                         <div style="text-align: center;">
     <label for="start-date" style="display: block; margin-bottom: 5px;">בחר תאריך התחלה</label>
     <input type="date" id="select-date" style="width: 200px; padding: 8px; border-radius: 5px; border: 1px solid #ccc; margin-bottom: 10px;">
@@ -262,6 +270,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+
 
     <!-- Firebase -->
     <script type="module">
@@ -463,6 +473,8 @@ async function updateUserData(userId, newDisplayName, newRole, oldDisplayName) {
     }
 
 }
+let checkRturn= false
+let getData
 document.getElementById('sortAllButton').addEventListener('click', async () => {
     await displayAllshiftsFromFirebase();
 });
@@ -473,6 +485,18 @@ document.getElementById('sortHomeButton').addEventListener('click', async () => 
 // Add event listener for sorting by "סטודיו"
 document.getElementById('sortStudioButton').addEventListener('click', async () => {
     await displayShiftsFromFirebase('סטודיו');
+});
+document.getElementById('downloadExcelButton').addEventListener('click', async function() {
+    try {
+        checkRturn=true
+       
+      displayAllshiftsFromFirebase();
+      // זה מודפס רק כאשר הנתונים נטענים בהצלחה
+        // קריאה לפונקציה generateExcelFile רק כאשר הנתונים נטענים בהצלחה
+        
+    } catch (error) {
+     
+    }
 });
 
 async function displayShiftsFromFirebase(type) {
@@ -524,11 +548,11 @@ let date2=''
              if(date.endsWith("m")){
                 date2 = date.slice(0, -1);
               
-                console.log(date2)
+              
              }
              else{
                date2=date
-               console.log(date2)
+            
                
              }
 
@@ -552,7 +576,7 @@ let dateObject12 = new Date(dateStr);
 
 // Get the number of milliseconds since January 1, 1970
 let midDate = dateObject12.getTime();
-console.log(midDate)
+
 
 
 let date1 = document.getElementById("select-date").value
@@ -629,7 +653,9 @@ let dateNumberEnd = dateObject1.getTime();
             tableBody.appendChild(row);
         }
         });
-    
+        if(checkRturn===true){
+           generateExcelFile(shiftDataArray)
+            }
     } catch (error) {
         console.error('Error displaying shifts:', error);
     }
@@ -637,41 +663,34 @@ let dateNumberEnd = dateObject1.getTime();
 
 // Call the function to initially display the shifts
 async function displayAllshiftsFromFirebase() {
-    
     const tableBody = document.getElementById('shiftsTableBody');
-const shiftsCollection = collection(db, 'shifts');
+    const shiftsCollection = collection(db, 'shifts');
 
-// Clear the table body before appending new data
-tableBody.innerHTML = '';
+    // Clear the table body before appending new data
+    tableBody.innerHTML = '';
 
-// Get the selected user's display name
-let selectElement = document.getElementById('usersSelect');
-let selectedOption = selectElement.options[selectElement.selectedIndex];
-let name2 = selectedOption.textContent;
+    // Get the selected user's display name
+    let selectElement = document.getElementById('usersSelect');
+    let selectedOption = selectElement.options[selectElement.selectedIndex];
+    let name2 = selectedOption.textContent;
 
-// Define the initial query
-let shiftsQuery;
+    // Define the initial query
+    let shiftsQuery;
 
-// Check if all users are selected
-if (name2 === "כולם") {
-    // If so, query all shifts
-    shiftsQuery = shiftsCollection;
-} else {
-    // Otherwise, filter shifts by the selected user's display name
-    shiftsQuery = query(shiftsCollection, where('displayName', '==', name2));
-}
-
-// Now, you can use the shiftsQuery as needed
+    // Check if all users are selected
+    if (name2 === "כולם") {
+        // If so, query all shifts
+        shiftsQuery = shiftsCollection;
+    } else {
+        // Otherwise, filter shifts by the selected user's display name
+        shiftsQuery = query(shiftsCollection, where('displayName', '==', name2));
+    }
 
     // Retrieve shifts data from Firebase
-
-
-
-try {
-    const querySnapshot = await getDocs(shiftsQuery);
-    const shiftDataArray = querySnapshot.docs.map(doc => doc.data());
-    // Process the shift data as needed
-
+    try {
+        const querySnapshot = await getDocs(shiftsQuery);
+        const shiftDataArray = querySnapshot.docs.map(doc => doc.data());
+        // Process the shift data as needed
 
         // Sort the array by displayName and then by date
         shiftDataArray.sort((a, b) => {
@@ -687,123 +706,117 @@ try {
         // Process each sorted shift data
         shiftDataArray.forEach(shiftData => {
             let { date, displayName, shiftType } = shiftData;
-let date2=''
-             if(date.endsWith("m")){
+            let date2 = ''
+            if (date.endsWith("m")) {
                 date2 = date.slice(0, -1);
-              
-             }
-             else{
-               date2=date
-              
-               
-             }
-
-        
-  // Split the date string into day, month, and year parts
-  const parts = date2.split('/').map(part => {
-    // Add leading zero if necessary
-    return part.length === 1 ? '0' + part : part;
-}).join('-');
-
-const reversedParts = parts.split('-').reverse().join('-');
-
-
-let dateStr = reversedParts;
-
-// Parse the date string into a Date object
-let dateObject12 = new Date(dateStr);
-
-// Check if the dateStr is in a valid format
-
-
-// Get the number of milliseconds since January 1, 1970
-let midDate = dateObject12.getTime();
-console.log(midDate)
-
-
-let date1 = document.getElementById("select-date").value
-let dateStart =date1
-
-// Parse the date string into a Date object
-let dateObject = new Date(dateStart);
-
-// Get the number of dateObject.getTime();milliseconds since January 1, 1970
-let dateNumberStart = dateObject.getTime();
-
-
-
-
-let dateEND1 = document.getElementById("select-date1").value
-let dateEND  = dateEND1
-// Parse the date string into a Date object
-let dateObject1 = new Date(dateEND);
-
-// Get the number of milliseconds since January 1, 1970
-let dateNumberEnd = dateObject1.getTime();
-
-
-
-
-
-console.log(dateNumberEnd);
-console.log(midDate);
-console.log(dateNumberStart)
-       if(shiftType &&  dateNumberStart <=midDate && dateNumberEnd >= midDate){
-            const isAfternoonShift = date.endsWith('m');
+            } else {
+                date2 = date;
+            }
             
-            // Create a new row for each shift
-            const row = document.createElement('tr');
 
-            // Create and append table cells for date, display name, shift type, and delete button
-            const dateCell = document.createElement('td');
-            date = date.replace('m', '');
-            dateCell.textContent = date;
-            row.appendChild(dateCell);
+            // Split the date string into day, month, and year parts
+            const parts = date2.split('/').map(part => {
+                // Add leading zero if necessary
+                return part.length === 1 ? '0' + part : part;
+            }).join('-');
 
-            const displayNameCell = document.createElement('td');
-            displayNameCell.textContent = displayName;
-            row.appendChild(displayNameCell);
+            const reversedParts = parts.split('-').reverse().join('-');
 
-            const morningShiftCell = document.createElement('td');
-            const afternoonShiftCell = document.createElement('td');
-            
-            // Set shift type based on whether it's morning or afternoon shift
+            let dateStr = reversedParts;
+
+            // Parse the date string into a Date object
+            let dateObject12 = new Date(dateStr);
+
+            // Get the number of milliseconds since January 1, 1970
+            let midDate = dateObject12.getTime();
+
+            let date1 = document.getElementById("select-date").value
+            let dateStart = date1
+
+            // Parse the date string into a Date object
+            let dateObject = new Date(dateStart);
+
+            // Get the number of milliseconds since January 1, 1970
+            let dateNumberStart = dateObject.getTime();
+
+            let dateEND1 = document.getElementById("select-date1").value
+            let dateEND = dateEND1
+
+            // Parse the date string into a Date object
+            let dateObject1 = new Date(dateEND);
+
+            // Get the number of milliseconds since January 1, 1970
+            let dateNumberEnd = dateObject1.getTime();
+
+            if (shiftType && dateNumberStart <= midDate && dateNumberEnd >= midDate) {
+                const isAfternoonShift = date.endsWith('m');
+
+                // Create a new row for each shift
+                const row = document.createElement('tr');
+
+                // Create and append table cells for date, display name, shift type, and delete button
+                const dateCell = document.createElement('td');
+                date = date.replace('m', '');
+                dateCell.textContent = date;
+                row.appendChild(dateCell);
+
+                const displayNameCell = document.createElement('td');
+                displayNameCell.textContent = displayName;
+                row.appendChild(displayNameCell);
+
+                const morningShiftCell = document.createElement('td');
+                const afternoonShiftCell = document.createElement('td');
+
+                // Set shift type based on whether it's morning or afternoon shift
                 if (isAfternoonShift) {
-        afternoonShiftCell.textContent = shiftType;
-        if (shiftType === "בית") {
-            afternoonShiftCell.classList.add('bg-warning');
-            row.appendChild(afternoonShiftCell);
-        } else if (shiftType === "סטודיו") {
-            afternoonShiftCell.classList.add('bg-primary');
-            row.appendChild(afternoonShiftCell);
-        }
-    } else {
-        morningShiftCell.textContent = shiftType;
-        if (shiftType === "בית") {
-            morningShiftCell.classList.add('bg-warning');
-            row.appendChild(morningShiftCell);
-        } else if (shiftType === "סטודיו") {
-            morningShiftCell.classList.add('bg-primary');
-            row.appendChild(morningShiftCell);
-            row.appendChild(morningShiftCell);
-        }
-    }
-            row.appendChild(morningShiftCell);
-            row.appendChild(afternoonShiftCell);
+                    afternoonShiftCell.textContent = shiftType;
+                    if (shiftType === "בית") {
+                        afternoonShiftCell.classList.add('bg-warning');
+                        row.appendChild(afternoonShiftCell);
+                    } else if (shiftType === "סטודיו") {
+                        afternoonShiftCell.classList.add('bg-primary');
+                        row.appendChild(afternoonShiftCell);
+                    }
+                } else {
+                    morningShiftCell.textContent = shiftType;
+                    if (shiftType === "בית") {
+                        morningShiftCell.classList.add('bg-warning');
+                        row.appendChild(morningShiftCell);
+                    } else if (shiftType === "סטודיו") {
+                        morningShiftCell.classList.add('bg-primary');
+                        row.appendChild(morningShiftCell);
+                        row.appendChild(morningShiftCell);
+                    }
+                }
+                row.appendChild(morningShiftCell);
+                row.appendChild(afternoonShiftCell);
 
-           
-
-            // Append the row to the table body
-            tableBody.appendChild(row);
-        }
+                // Append the row to the table body
+                tableBody.appendChild(row);
+            }
+            if(checkRturn===true){
+           generateExcelFile(shiftDataArray)
+            }
         });
-    
+
+        // Generate and download the Excel file here
+        // Call the generateExcelFile function passing the shiftDataArray
+
     } catch (error) {
         console.error('Error displaying shifts:', error);
     }
-
+   
 }
-// Call the function to initially display the shifts
+function generateExcelFile(shiftDataArray) {
+
+    const workbook = XLSX.utils.book_new();
+    const worksheet = XLSX.utils.json_to_sheet(shiftDataArray);
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Shifts');
+    XLSX.writeFile(workbook, 'shifts.xlsx');
+}
+// Function to generate and download the Excel file
+
+
 
 async function displayUsersInSelect() {
     const usersSelect = document.getElementById('usersSelect');
